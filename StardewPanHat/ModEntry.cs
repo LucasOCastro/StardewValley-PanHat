@@ -12,6 +12,8 @@ public class ModEntry : Mod
         
         PanPatches.PatchAll(harmony);
         ToolPatches.PatchAll(harmony);
+        UtilityPatches.PatchAll(harmony);
         InventoryMenuPatches.PatchAll(harmony);
+        InventoryPagePatches.PatchAll(harmony);
     }
 }
