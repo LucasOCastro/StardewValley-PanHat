@@ -7,7 +7,7 @@ namespace StardewPanHat.Patches;
 
 public static class UtilityPatches
 {
-    private const string PanIDModDataKey = "PanHat_HatPanId";
+    private static string PanIDModDataKey => ModEntry.QualifyKey("HatPanId"); 
     
     private static bool PerformSpecialItemPlaceReplacement_ChangeHat_Prefix(ref Item __result, Item placedItem)
     {
