@@ -1,11 +1,13 @@
-﻿using StardewValley.Objects;
+﻿using Netcode;
+using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace StardewPanHat;
 
 public class HatWrapper : Object
 {
-    public Hat InternalHat { get; }
+    private readonly NetRef<Hat> _internalHat = new();
+    public Hat InternalHat => _internalHat.Value;
 
     public override string DisplayName => InternalHat.DisplayName;
 
@@ -13,6 +15,12 @@ public class HatWrapper : Object
 
     public HatWrapper(Hat hat) : base(hat.ItemId, 1)
     {
-        InternalHat = hat;
+        _internalHat.Value = hat;
+    }
+
+    protected override void initNetFields()
+    {
+        base.initNetFields();
+        NetFields.AddField(_internalHat, nameof(_internalHat));
     }
 }
