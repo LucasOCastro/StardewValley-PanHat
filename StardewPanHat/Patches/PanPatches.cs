@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using StardewValley.Tools;
+// ReSharper disable InconsistentNaming
 
 namespace StardewPanHat.Patches;
 

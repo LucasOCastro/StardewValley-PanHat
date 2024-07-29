@@ -2,6 +2,7 @@
 using StardewValley;
 using StardewValley.Tools;
 using Object = StardewValley.Object;
+// ReSharper disable InconsistentNaming
 
 namespace StardewPanHat.Patches;
 
