@@ -1,0 +1,9 @@
+﻿{
+  "Name": "Pan Hats",
+  "Author": "Malkavian",
+  "Version": "1.0.0",
+  "Description": "Cover your ugly pan with a nice hat!",
+  "UniqueID": "malkavian.panhats",
+  "EntryDll": "StardewPanHat.dll",
+  "MinimumApiVersion": "4.0.0"
+}
