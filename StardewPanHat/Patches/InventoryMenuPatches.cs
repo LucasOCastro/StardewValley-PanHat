@@ -14,7 +14,7 @@ public static class InventoryMenuPatches
      * I want to add another situation, where 'toAddTo' is a Hat and I create a HatWrapper.
      *  (toAddTo == null || toAddTo is Object || (toAddTo is Hat hat; toAddTo = new HatWrapper(hat)))
      */
-    private static IEnumerable<CodeInstruction> InventoryMenu_rightClick_GenerateHatWrapper_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> rightClick_GenerateHatWrapper_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         bool alreadyPatched = false;
         List<CodeInstruction> list = new(instructions);
@@ -60,7 +60,7 @@ public static class InventoryMenuPatches
     {
         harmony.Patch(
             original: AccessTools.Method(typeof(InventoryMenu), nameof(InventoryMenu.rightClick)),
-            transpiler: new(typeof(InventoryMenuPatches), nameof(InventoryMenu_rightClick_GenerateHatWrapper_Transpiler))
+            transpiler: new(typeof(InventoryMenuPatches), nameof(rightClick_GenerateHatWrapper_Transpiler))
         );
     }
 }
