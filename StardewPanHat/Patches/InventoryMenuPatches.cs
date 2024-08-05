@@ -6,7 +6,7 @@ using Object = StardewValley.Object;
 
 namespace StardewPanHat.Patches;
 
-public static class InventoryMenuPatches
+internal static class InventoryMenuPatches
 {
     /**
      * One of the conditions to attach an object ot a tool is:

@@ -8,7 +8,7 @@ using StardewValley.Tools;
 
 namespace StardewPanHat.Patches;
 
-public static class UtilityPatches
+internal static class UtilityPatches
 {
     private static string PanIDModDataKey => ModEntry.QualifyKey("HatPanId");
     private static string StoredModDataKey => ModEntry.QualifyKey("ModData/");

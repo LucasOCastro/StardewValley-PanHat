@@ -6,7 +6,7 @@ using StardewValley.Tools;
 
 namespace StardewPanHat.Patches;
 
-public static class PanPatches
+internal static class PanPatches
 {
     //Store index in a dictionary to ensure it is compatible with any mod that adds extra attachment slots as well
     public static bool TryGetAttachment(Pan pan, [NotNullWhen(true)] out Hat? hatWrapper)

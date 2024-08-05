@@ -4,7 +4,7 @@ using StardewValley.Menus;
 
 namespace StardewPanHat.Patches;
 
-public static class InventoryPagePatches
+internal static class InventoryPagePatches
 {
     //Unwrap the wrapper whenever it is grabbed in the inventory
     private static void setHeldItem_UnwrapHatWrapper_Prefix(ref Item item)

@@ -6,7 +6,7 @@ using Object = StardewValley.Object;
 
 namespace StardewPanHat.Patches;
 
-public static class ToolPatches
+internal static class ToolPatches
 {
     public static void CanThisBeAttached_AllowHatWrapper_Postfix(Tool __instance, ref bool __result, Object o, int slot)
     {
