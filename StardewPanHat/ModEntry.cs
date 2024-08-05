@@ -6,6 +6,7 @@ namespace StardewPanHat;
 
 public class ModEntry : Mod
 {
+    public static IMonitor MonitorSingleton { get; private set; } = null!;
     private static string _keyQualifier = null!;
 
     /// <summary> Adds the unique mod ID to the beginning of a key, making it unique. </summary>
@@ -13,6 +14,7 @@ public class ModEntry : Mod
     
     public override void Entry(IModHelper helper)
     {
+        MonitorSingleton = Monitor;
         _keyQualifier = ModManifest.UniqueID + '/';
         Harmony harmony = new(ModManifest.UniqueID);
         

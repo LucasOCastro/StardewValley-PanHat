@@ -6,13 +6,12 @@ namespace StardewPanHat.Patches;
 
 public static class InventoryPagePatches
 {
+    //Unwrap the wrapper whenever it is grabbed in the inventory
     private static void setHeldItem_UnwrapHatWrapper_Prefix(ref Item item)
     {
-        if (item is HatWrapper wrapper)
-        {
-            wrapper.onDetachedFromParent();
-            item = wrapper.InternalHat;
-        }
+        if (item is not HatWrapper wrapper) return;
+        wrapper.onDetachedFromParent();
+        item = wrapper.InternalHat;
     }
 
     public static void PatchAll(Harmony harmony)

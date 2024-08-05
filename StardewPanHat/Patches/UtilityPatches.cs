@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Mods;
 using StardewValley.Objects;
@@ -16,36 +17,55 @@ public static class UtilityPatches
     
     private const char RangeSeparator = '~';
     
-    private static bool PerformSpecialItemPlaceReplacement_ChangeHat_Prefix(ref Item __result, Item placedItem)
+    //Changes a pan into a hat when equiping
+    private static bool PerformSpecialItemPlaceReplacement_ChangeIntoHat_Prefix(ref Item __result, Item placedItem)
     {
-        if (placedItem is not Pan pan || pan.attachments[PanPatches.GetAttachmentIndex(pan)] is not HatWrapper wrapper) 
+        if (placedItem is not Pan pan || !PanPatches.TryGetAttachment(pan, out var hat))
             return true;
-        
-        var hat = wrapper.InternalHat;
-        hat.modData[PanIDModDataKey] = pan.QualifiedItemId;
-        
-        StoreModData(pan.modData, hat.modData);
-        StoreEnchantments(pan.enchantments, hat.enchantments, hat.modData, StoredEnchantmentIndicesKey);
-        StoreEnchantments(pan.previousEnchantments, hat.previousEnchantments, hat.modData, StoredPreviousEnchantmentIndicesKey);
 
-        __result = hat;
+        try
+        {
+            if (hat == null) throw new NullReferenceException();
+            hat.modData[PanIDModDataKey] = pan.QualifiedItemId;
+
+            StoreModData(pan.modData, hat.modData);
+            StoreEnchantments(pan.enchantments, hat.enchantments, hat.modData, StoredEnchantmentIndicesKey);
+            StoreEnchantments(pan.previousEnchantments, hat.previousEnchantments, hat.modData, StoredPreviousEnchantmentIndicesKey);
+
+            __result = hat;
+        }
+        catch (Exception)
+        {
+            ModEntry.MonitorSingleton.Log($"Invalid internal hat stored in {pan.Name}.", LogLevel.Error);
+        }
         return false;
     }
 
+    //Changes a hat into a pan when unequiping
     private static bool PerformSpecialItemGrabReplacement_RestorePan_Prefix(ref Item __result, Item heldItem)
     {
         if (heldItem is not Hat hat || !hat.modData.TryGetValue(PanIDModDataKey, out var panId)) 
             return true;
-        
-        var pan = ItemRegistry.Create<Pan>(panId);
-        pan.attach(new HatWrapper(hat));
-        hat.modData.Remove(PanIDModDataKey);
+
+        try
+        {
+            var pan = ItemRegistry.Create<Pan>(panId, allowNull: true);
+            if (pan == null) throw new NullReferenceException();
             
-        RetrieveModData(hat.modData, pan.modData);
-        RetrieveEnchantments(hat.enchantments, hat.modData, pan.enchantments, StoredEnchantmentIndicesKey);
-        RetrieveEnchantments(hat.previousEnchantments, hat.modData, pan.previousEnchantments, StoredPreviousEnchantmentIndicesKey);
+            pan.attach(new HatWrapper(hat));
+            hat.modData.Remove(PanIDModDataKey);
+            
+            RetrieveModData(hat.modData, pan.modData);
+            RetrieveEnchantments(hat.enchantments, hat.modData, pan.enchantments, StoredEnchantmentIndicesKey);
+            RetrieveEnchantments(hat.previousEnchantments, hat.modData, pan.previousEnchantments, StoredPreviousEnchantmentIndicesKey);
         
-        __result = pan;
+            __result = pan;
+        }
+        catch (Exception)
+        {
+            ModEntry.MonitorSingleton.Log($"Invalid pan ID {panId} stored in {hat.Name}.", LogLevel.Error);
+            return true;
+        }
         return false;
     }
 
@@ -53,7 +73,7 @@ public static class UtilityPatches
     {
         harmony.Patch(
             original: AccessTools.Method(typeof(Utility), nameof(Utility.PerformSpecialItemPlaceReplacement)),
-            prefix: new(typeof(UtilityPatches), nameof(PerformSpecialItemPlaceReplacement_ChangeHat_Prefix))
+            prefix: new(typeof(UtilityPatches), nameof(PerformSpecialItemPlaceReplacement_ChangeIntoHat_Prefix))
         );
         harmony.Patch(
             original: AccessTools.Method(typeof(Utility), nameof(Utility.PerformSpecialItemGrabReplacement)),
