@@ -6,5 +6,11 @@
   "UniqueID": "malkavian.panhats",
   "EntryDll": "StardewPanHat.dll",
   "MinimumApiVersion": "4.0.0",
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.SpaceCore",
+      "IsRequired": true
+    }
+  ],
   "UpdateKeys": ["Nexus:26741", "GitHub:LucasOCastro/StardewValley-PanHat"]
 }
