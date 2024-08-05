@@ -5,5 +5,6 @@
   "Description": "Cover your ugly pan with a nice hat!",
   "UniqueID": "malkavian.panhats",
   "EntryDll": "StardewPanHat.dll",
-  "MinimumApiVersion": "4.0.0"
+  "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": ["Nexus:26741", "GitHub:LucasOCastro/StardewValley-PanHat"]
 }
