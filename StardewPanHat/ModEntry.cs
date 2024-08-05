@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewPanHat.Patches;
 
 namespace StardewPanHat;
@@ -17,8 +18,10 @@ internal class ModEntry : Mod
     {
         MonitorSingleton = Monitor;
         _keyQualifier = ModManifest.UniqueID + '/';
+        
         HandleHarmonyPatches();
-        helper.Events.GameLoop.GameLaunched += (_, _) => RegisterSerializableTypes();
+        helper.Events.GameLoop.GameLaunched += RegisterSerializableTypes;
+        helper.Events.Multiplayer.PeerContextReceived += VerifyPeerMods;
     }
 
     private void HandleHarmonyPatches()
@@ -31,10 +34,16 @@ internal class ModEntry : Mod
         InventoryPagePatches.PatchAll(harmony);
     }
 
-    private void RegisterSerializableTypes()
+    private void RegisterSerializableTypes(object? sender, GameLaunchedEventArgs evt)
     {
         var api = Helper.ModRegistry.GetApi<ISpaceCoreApi>("spacechase0.SpaceCore");
-        if (api == null) throw new("Missing SpaceCore!");
+        if (api == null) throw new($"{ModManifest.UniqueID} requires SpaceCore!");
         api.RegisterSerializerType(typeof(HatWrapper));
+    }
+    
+    private void VerifyPeerMods(object? sender, PeerContextReceivedEventArgs evt)
+    {
+        if (evt.Peer.GetMod(ModManifest.UniqueID) == null)
+            Monitor.Log($"Player with ID {evt.Peer.PlayerID} does not have {ModManifest.UniqueID} installed.");
     }
 }
