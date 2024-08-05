@@ -6,7 +6,7 @@ using Object = StardewValley.Object;
 namespace StardewPanHat;
 
 [XmlType($"Mods_{ModEntry.ModAuthorName}_{nameof(HatWrapper)}")]
-internal class HatWrapper : Object
+public class HatWrapper : Object
 {
     [XmlElement(nameof(_internalHat))]
     private readonly NetRef<Hat> _internalHat = new();

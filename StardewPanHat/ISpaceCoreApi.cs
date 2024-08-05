@@ -1,6 +1,6 @@
 ﻿namespace StardewPanHat;
 
-internal interface ISpaceCoreApi
+public interface ISpaceCoreApi
 {
     void RegisterSerializerType(Type type);
 }

@@ -18,7 +18,7 @@ internal class ModEntry : Mod
         MonitorSingleton = Monitor;
         _keyQualifier = ModManifest.UniqueID + '/';
         HandleHarmonyPatches();
-        RegisterSerializableTypes();
+        helper.Events.GameLoop.GameLaunched += (_, _) => RegisterSerializableTypes();
     }
 
     private void HandleHarmonyPatches()
