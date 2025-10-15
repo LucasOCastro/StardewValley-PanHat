@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewPanHat.HatStuff;
 using StardewPanHat.Patches;
 
 namespace StardewPanHat;
@@ -37,8 +38,11 @@ internal class ModEntry : Mod
     private void RegisterSerializableTypes(object? sender, GameLaunchedEventArgs evt)
     {
         var api = Helper.ModRegistry.GetApi<ISpaceCoreApi>("spacechase0.SpaceCore");
-        if (api == null) throw new($"{ModManifest.UniqueID} requires SpaceCore!");
+        if (api == null)
+            throw new($"{ModManifest.UniqueID} requires SpaceCore!");
+        
         api.RegisterSerializerType(typeof(HatWrapper));
+        Monitor.Log($"{ModManifest.UniqueID} registered ${nameof(HatWrapper)} with SpaceCore.");
     }
     
     private void VerifyPeerMods(object? sender, PeerContextReceivedEventArgs evt)

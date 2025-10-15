@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using StardewPanHat.HatStuff;
 using StardewValley;
 using StardewValley.Tools;
 using Object = StardewValley.Object;
@@ -10,7 +11,7 @@ internal static class ToolPatches
 {
     public static void CanThisBeAttached_AllowHatWrapper_Postfix(Tool __instance, ref bool __result, Object o, int slot)
     {
-        if (__instance is Pan pan && slot == PanPatches.GetAttachmentIndex(pan))
+        if (__instance is Pan && slot == PanAttachmentSlots.Hat)
             __result = o is HatWrapper;
     }
 

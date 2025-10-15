@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Emit;
 using HarmonyLib;
+using StardewPanHat.HatStuff;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
@@ -9,7 +10,7 @@ namespace StardewPanHat.Patches;
 internal static class InventoryMenuPatches
 {
     /**
-     * One of the conditions to attach an object ot a tool is:
+     * One of the conditions to attach an object to a tool is:
      *  (toAddTo == null || toAddTo is Object)
      * I want to add another situation, where 'toAddTo' is a Hat and I create a HatWrapper.
      *  (toAddTo == null || toAddTo is Object || (toAddTo is Hat hat; toAddTo = new HatWrapper(hat)))

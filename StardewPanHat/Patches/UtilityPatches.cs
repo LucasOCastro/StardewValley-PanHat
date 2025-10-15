@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using StardewModdingAPI;
+using StardewPanHat.HatStuff;
 using StardewValley;
 using StardewValley.Mods;
 using StardewValley.Objects;
@@ -17,15 +18,17 @@ internal static class UtilityPatches
     
     private const char RangeSeparator = '~';
     
-    //Changes a pan into a hat when equiping
+    //Changes a pan into a hat when equipping
     private static bool PerformSpecialItemPlaceReplacement_ChangeIntoHat_Prefix(ref Item __result, Item placedItem)
     {
-        if (placedItem is not Pan pan || !PanPatches.TryGetAttachment(pan, out var hat))
+        // If not pan or has no hat attached, skip
+        if (placedItem is not Pan pan || !PanAttachmentSlots.TryGetAttachedHat(pan, out var hat))
             return true;
 
+        // Extract the attached hat into the slot and store the og pan's info
         try
         {
-            if (hat == null) throw new NullReferenceException();
+            if (hat == null) throw new NullReferenceException("Null hat when trying to change pan into hat.");
             hat.modData[PanIDModDataKey] = pan.QualifiedItemId;
 
             StoreModData(pan.modData, hat.modData);
@@ -33,24 +36,27 @@ internal static class UtilityPatches
             StoreEnchantments(pan.previousEnchantments, hat.previousEnchantments, hat.modData, StoredPreviousEnchantmentIndicesKey);
 
             __result = hat;
+            return false;
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            ModEntry.MonitorSingleton.Log($"Invalid internal hat stored in {pan.Name}.", LogLevel.Error);
+            ModEntry.MonitorSingleton.Log($"Invalid internal hat stored in {pan.Name}: {e.Message}", LogLevel.Error);
+            return true;
         }
-        return false;
     }
 
-    //Changes a hat into a pan when unequiping
+    //Changes a hat into a pan when unequipping
     private static bool PerformSpecialItemGrabReplacement_RestorePan_Prefix(ref Item __result, Item heldItem)
     {
+        // If is not hat or has no pan info stored, skip
         if (heldItem is not Hat hat || !hat.modData.TryGetValue(PanIDModDataKey, out var panId)) 
             return true;
 
+        // Recreate the old pan from the stored data and fill it with saved data
         try
         {
             var pan = ItemRegistry.Create<Pan>(panId, allowNull: true);
-            if (pan == null) throw new NullReferenceException();
+            if (pan == null) throw new NullReferenceException("Null pan when trying to restore pan from hat.");
             
             pan.attach(new HatWrapper(hat));
             hat.modData.Remove(PanIDModDataKey);
@@ -60,13 +66,13 @@ internal static class UtilityPatches
             RetrieveEnchantments(hat.previousEnchantments, hat.modData, pan.previousEnchantments, StoredPreviousEnchantmentIndicesKey);
         
             __result = pan;
+            return false;
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            ModEntry.MonitorSingleton.Log($"Invalid pan ID {panId} stored in {hat.Name}.", LogLevel.Error);
+            ModEntry.MonitorSingleton.Log($"Invalid pan ID {panId} stored in {hat.Name}: {e.Message}", LogLevel.Error);
             return true;
         }
-        return false;
     }
 
     public static void PatchAll(Harmony harmony)
