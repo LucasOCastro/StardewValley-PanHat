@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewPanHat.HatStuff;
 using StardewPanHat.Patches;
 
 namespace StardewPanHat;

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using StardewPanHat.HatStuff;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -9,7 +10,9 @@ internal static class InventoryPagePatches
     //Unwrap the wrapper whenever it is grabbed in the inventory
     private static void setHeldItem_UnwrapHatWrapper_Prefix(ref Item item)
     {
-        if (item is not HatWrapper wrapper) return;
+        if (item is not HatWrapper wrapper)
+            return;
+        
         wrapper.onDetachedFromParent();
         item = wrapper.InternalHat;
     }

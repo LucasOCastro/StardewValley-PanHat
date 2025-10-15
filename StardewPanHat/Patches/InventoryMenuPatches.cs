@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Emit;
 using HarmonyLib;
+using StardewPanHat.HatStuff;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
