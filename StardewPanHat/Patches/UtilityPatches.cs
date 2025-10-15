@@ -36,12 +36,13 @@ internal static class UtilityPatches
             StoreEnchantments(pan.previousEnchantments, hat.previousEnchantments, hat.modData, StoredPreviousEnchantmentIndicesKey);
 
             __result = hat;
+            return false;
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            ModEntry.MonitorSingleton.Log($"Invalid internal hat stored in {pan.Name}.", LogLevel.Error);
+            ModEntry.MonitorSingleton.Log($"Invalid internal hat stored in {pan.Name}: {e.Message}", LogLevel.Error);
+            return true;
         }
-        return false;
     }
 
     //Changes a hat into a pan when unequipping
@@ -65,13 +66,13 @@ internal static class UtilityPatches
             RetrieveEnchantments(hat.previousEnchantments, hat.modData, pan.previousEnchantments, StoredPreviousEnchantmentIndicesKey);
         
             __result = pan;
+            return false;
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            ModEntry.MonitorSingleton.Log($"Invalid pan ID {panId} stored in {hat.Name}.", LogLevel.Error);
+            ModEntry.MonitorSingleton.Log($"Invalid pan ID {panId} stored in {hat.Name}: {e.Message}", LogLevel.Error);
             return true;
         }
-        return false;
     }
 
     public static void PatchAll(Harmony harmony)
