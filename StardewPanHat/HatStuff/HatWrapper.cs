@@ -1,9 +1,10 @@
 ﻿using System.Xml.Serialization;
 using Netcode;
+using StardewValley;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
-namespace StardewPanHat;
+namespace StardewPanHat.HatStuff;
 
 [XmlType($"Mods_{ModEntry.ModAuthorName}_{nameof(HatWrapper)}")]
 public class HatWrapper : Object
@@ -12,9 +13,7 @@ public class HatWrapper : Object
     private readonly NetRef<Hat> _internalHat = new();
     public Hat InternalHat => _internalHat.Value;
 
-    public override string DisplayName => InternalHat.DisplayName;
-
-    public override string TypeDefinitionId => "(H)";
+    public override string TypeDefinitionId => ItemRegistry.type_hat;
 
     public HatWrapper()
     {
